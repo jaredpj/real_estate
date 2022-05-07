@@ -1,0 +1,16 @@
+name: real-estate
+
+dependencies:
+- python>=3.9.0
+- pip
+- pandas
+- plotly
+- numpy
+- pip:
+  - pycaret
+  - alpha-vantage
+  - datetime
+  - nbformat
+  - uszipcode
+  - pandera
+  - scikit-learn==0.23.2
