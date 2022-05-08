@@ -44,7 +44,20 @@ re_hot['county_name'] = re_hot['county_name'].str.upper()
 
 redfin['property_type'] = redfin['property_type'].str.upper()
 
+# Convert data types
+redfin['year_month'] = pd.to_datetime(redfin['year_month'])
+redfin['county_name'] = redfin['county_name'].astype('str')
+redfin['property_type'] = redfin['property_type'].astype('str')
+
+re_inv['county_fips'] = re_inv['county_fips'].astype('int')
+re_hot['county_fips'] = re_hot['county_fips'].astype('int')
+
+re_inv['year_month'] = pd.to_datetime(re_inv['year_month'].astype('str').str.slice(0,4) + '-' + re_inv['year_month'].astype('str').str.slice(4,6) + '-01')
+re_hot['year_month'] = pd.to_datetime(re_hot['year_month'].astype('str').str.slice(0,4) + '-' + re_hot['year_month'].astype('str').str.slice(4,6) + '-01')
+
+# Merge Realtor.com data
+realtor = pd.merge(re_inv, re_hot, on = ['year_month', 'county_name', 'county_fips'], how = 'left')
+
 # Convert to Parquet
-redfin.to_parquet('redfin.parquet')
-re_inv.to_parquet('realtor_inventory.parquet')
-re_hot.to_parquet('realtor_hotness.parquet')
+redfin.to_parquet('./data/redfin.parquet')
+realtor.to_parquet('./data/realtor.parquet')
